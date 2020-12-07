@@ -35,3 +35,8 @@ The pretrained models are included in `./model` and you can directly run this pa
 Run `test_light.py` and `test_temp.py`, and the heatmaps (confidence) will be stored in `./results`
 
 ### MLE results and Visualization
+
+Run `MLE.m`. The visualization of heatmaps are stored in `./results/heatmap_visual`. 
+
+Here is an example of visualization plot
+
