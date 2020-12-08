@@ -46,3 +46,6 @@ Here are the MLE localization results
 
 ![distribution](example_figs/pic1.png)
 ![localization](example_figs/pic2.png)
+
+## Reference 
+> Mingyu Yang, Roger Hsiao, Gordy Carichner, Katherine Ernst, Jaechan Lim, Delbert A. Green II, Inhee Lee, David Blaauw, and Hun-Seok Kim, "Migrating Monarch Butterfly Localization UsingMulti-Modal Sensor Fusion Neural Networks", EUSIPCO 2020
