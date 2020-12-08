@@ -41,11 +41,11 @@ def test(opt):
 
             results_temp[i, :] = temp_result.cpu().squeeze().detach().numpy()
     
-        fig_temp = os.path.join(opt.output_fig_folder, 'temp_'+str(n+1)+'.png')
-        plt.imshow(results_temp.transpose(), cmap='viridis', interpolation='nearest')
-        plt.colorbar()
-        plt.savefig(fig_temp)
-        plt.clf()
+        #fig_temp = os.path.join(opt.output_fig_folder, 'temp_'+str(n+1)+'.png')
+        #plt.imshow(results_temp.transpose(), cmap='viridis', interpolation='nearest')
+        #plt.colorbar()
+        #plt.savefig(fig_temp)
+        #plt.clf()
 
         path_temp = os.path.join(opt.output_folder, 'temp_' + str(n + 1) + '.mat')
 

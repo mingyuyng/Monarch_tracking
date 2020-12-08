@@ -113,11 +113,11 @@ if __name__ == '__main__':
 
     opt.batchsize = 500
     opt.lr = 1e-3
-    opt.epoch = 200
+    opt.epoch = 100
     opt.hidden = 256
     opt.dropout = 0
 
-    opt.stepsize = 80
+    opt.stepsize = 70
     opt.gamma = 0.1
 
     opt.save_log_dir = './logs'
