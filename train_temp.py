@@ -7,7 +7,7 @@ from dataloader import *
 from model import *
 from torch.optim.lr_scheduler import StepLR
 from easydict import EasyDict
-
+import scipy.io as sio
 
 def test_network(net, dataloader, device):
     net.eval()
@@ -32,25 +32,31 @@ def test_network(net, dataloader, device):
     return TP, T, P, correct, Number
 
 
-def train_network(train_loader, valid_loader, net, optimizer, scheduler, criterion, num_epoch, log_path, net_path, device, print_interval=1):
+def train_network(train_data, train_labels, batch_size, valid_loader, net, optimizer, scheduler, criterion, num_iter, log_path, net_path, device, print_interval=1):
+    
+    index_true = np.where(train_labels==1)[0]
+    index_false = np.where(train_labels==0)[0]
+    
+    for it in range(num_iter):
+        
+        batch_true_index = np.random.choice(len(index_true), batch_size//2)
+        batch_false_index = np.random.choice(len(index_false), batch_size//2)
 
-    for epoch in range(num_epoch):
+        batch_true_data = torch.from_numpy(train_data[index_true[batch_true_index]]).float().to(device)
+        batch_false_data = torch.from_numpy(train_data[index_false[batch_false_index]]).float().to(device)
+        batch_data = torch.cat((batch_true_data, batch_false_data), 0)
+        batch_label = torch.cat((torch.ones(batch_size//2), torch.zeros(batch_size//2)), 0).to(device)
 
-        for i, (frame) in enumerate(train_loader):
+        pred = net(batch_data)
+        loss = criterion(pred, batch_label.unsqueeze(1))
 
-            x = frame['temp'].float().to(device)
-            y = frame['label'].float().to(device)
-
-            pred = net(x)
-            loss = criterion(pred, y.unsqueeze(1))
-
-            loss.backward()
-            optimizer.step()
-            optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
 
         scheduler.step()
 
-        if epoch % print_interval == 0:
+        if it % print_interval == 0:
 
             TP, T, P, correct, Number = test_network(net, valid_loader, device)
 
@@ -62,7 +68,7 @@ def train_network(train_loader, valid_loader, net, optimizer, scheduler, criteri
             F2 = 5 * recall * precision / (recall + 4 * precision)
             F0 = (1 + 0.25**2) * recall * precision / (recall + 0.25**2 * precision)
 
-            message = f'Epoch: {epoch}, loss: {loss.item():.3f}, test acc: {accuracy:.3f}, Recall: {recall:.3f}, Precision: {precision:.3f}, F0.5: {F0:.3f}, F1: {F1:.3f}, F2: {F2:.3f}'
+            message = f'Iteration: {it}, loss: {loss.item():.3f}, test acc: {accuracy:.3f}, Recall: {recall:.3f}, Precision: {precision:.3f}, F0.5: {F0:.3f}, F1: {F1:.3f}, F2: {F2:.3f}'
 
             print(message)
 
@@ -74,20 +80,22 @@ def train_network(train_loader, valid_loader, net, optimizer, scheduler, criteri
 
 
 def main(opt):
-    dataset_train = dataloader_tmp(opt.train_data)
-    dataset_valid = dataloader_tmp(opt.test_data)
+    
+    # Prepare the training data
+    train_mat_data = sio.loadmat(opt.train_data)
+    valid_mat_data = sio.loadmat(opt.test_data)
+    
+    train_data = train_mat_data['tmp_set']
+    train_labels = train_mat_data['labels']
 
-    train_loader = torch.utils.data.DataLoader(dataset_train, batch_size=opt.batchsize, shuffle=True, num_workers=1, pin_memory=True)
+    # Prepare the validation data
+    dataset_valid = dataloader_tmp(opt.test_data)
     valid_loader = torch.utils.data.DataLoader(dataset_valid, batch_size=opt.batchsize, shuffle=False, num_workers=1, pin_memory=True)
 
     net = CNN_Temp(32, opt.dropout, opt.hidden).to(opt.device)
-
-    #net = CNN_Light(480, 128, opt.num_layer, 128, opt.dropout).to(opt.device)
     optimizer = optim.Adam(net.parameters(), lr=opt.lr)
     scheduler = StepLR(optimizer, step_size=opt.stepsize, gamma=opt.gamma)
-
-    # class 0 : class 1  =  3 : 1
-    criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([14]).to(opt.device))
+    criterion = nn.BCEWithLogitsLoss()
 
     if not os.path.exists(opt.save_log_dir):
         os.makedirs(opt.save_log_dir)
@@ -102,7 +110,7 @@ def main(opt):
     message = f'Start training Neural Network with Dropout: {opt.dropout}, hidden units: {opt.hidden}'
     print(message)
 
-    train_network(train_loader, valid_loader, net, optimizer, scheduler, criterion, opt.epoch, log_path, net_path, opt.device, opt.print_interval)
+    train_network(train_data, train_labels, opt.batchsize, valid_loader, net, optimizer, scheduler, criterion, opt.iterations, log_path, net_path, opt.device, opt.print_interval)
 
 
 if __name__ == '__main__':
@@ -113,12 +121,12 @@ if __name__ == '__main__':
 
     opt.batchsize = 500
     opt.lr = 1e-3
-    opt.epoch = 100
+    opt.iterations = 10000
     opt.hidden = 256
     opt.dropout = 0
 
-    opt.stepsize = 70
-    opt.gamma = 0.1
+    opt.stepsize = 5000
+    opt.gamma = 0.3
 
     opt.save_log_dir = './logs'
     opt.save_log_name = 'train_temp_log.txt'
@@ -126,7 +134,7 @@ if __name__ == '__main__':
     opt.save_net_dir = './model'
     opt.save_net_name = 'temp_net.w'
 
-    opt.print_interval = 1
+    opt.print_interval = 100
 
     opt.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     main(opt)
