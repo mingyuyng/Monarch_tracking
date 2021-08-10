@@ -116,16 +116,16 @@ def main(opt):
 if __name__ == '__main__':
     opt = EasyDict()
 
-    opt.train_data = 'dataset/Light_train_8_2019.mat'
-    opt.test_data = 'dataset/Light_valid_8_2019.mat'
+    opt.train_data = 'dataset/Light_train_8.mat'
+    opt.test_data = 'dataset/Light_valid_8.mat'
 
     opt.batchsize = 400
     opt.lr = 1e-3
-    opt.iteration = 3000
+    opt.iteration = 5000
     opt.num_layer = 3
     opt.dropout = 0.25
 
-    opt.stepsize = 2000
+    opt.stepsize = 4000
     opt.gamma = 0.1
 
     opt.save_log_dir = './logs'
@@ -136,5 +136,5 @@ if __name__ == '__main__':
 
     opt.print_interval = 100
 
-    opt.device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
+    opt.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     main(opt)
