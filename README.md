@@ -29,7 +29,7 @@ Run `MLE.m`. The visualization of heatmaps are stored in `./results/heatmap_visu
 
 Here is an example of visualization plot
 
-![heatmap1](example_figs/4.png)
+<img src="example_figs/4.png" alt="drawing" width="600"/>
 
 Here are the MLE localization results
 
