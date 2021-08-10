@@ -116,23 +116,23 @@ def main(opt):
 if __name__ == '__main__':
     opt = EasyDict()
 
-    opt.train_data = 'dataset/Light_train_8.mat'
-    opt.test_data = 'dataset/Light_valid_8.mat'
+    opt.train_data = 'dataset/Light_train_8_2019.mat'
+    opt.test_data = 'dataset/Light_valid_8_2019.mat'
 
     opt.batchsize = 400
     opt.lr = 1e-3
-    opt.iteration = 5000
+    opt.iteration = 3000
     opt.num_layer = 3
-    opt.dropout = 0
+    opt.dropout = 0.25
 
-    opt.stepsize = 4000
+    opt.stepsize = 2000
     opt.gamma = 0.1
 
     opt.save_log_dir = './logs'
     opt.save_log_name = 'train_light_log.txt'
 
     opt.save_net_dir = './model'
-    opt.save_net_name = 'light_net.w'
+    opt.save_net_name = 'light_net_2019.w'
 
     opt.print_interval = 100
 

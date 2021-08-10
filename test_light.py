@@ -43,11 +43,11 @@ def test(opt):
 
             results_light[i, :] = light_result.cpu().squeeze().detach().numpy()
         
-        #fig_light = os.path.join(opt.output_fig_folder, 'light_'+str(n+1)+'.png')
-       # plt.imshow(results_light.transpose(), cmap='viridis', interpolation='nearest')
-        #plt.colorbar()
-        #plt.savefig(fig_light)
-       # plt.clf()
+        fig_light = os.path.join(opt.output_fig_folder, 'light_'+str(n+1)+'.png')
+        plt.imshow(results_light.transpose(), cmap='viridis', interpolation='nearest')
+        plt.colorbar()
+        plt.savefig(fig_light)
+        plt.clf()
         
         path_light = os.path.join(opt.output_folder, 'light_' + str(n + 1) + '.mat')
 
@@ -58,17 +58,17 @@ def test(opt):
 if __name__ == '__main__':
     opt = EasyDict()
 
-    opt.dropout = 0.25
+    opt.dropout = 0
     opt.num_layer = 3
 
     opt.net_dir = './model'
-    opt.net_name = 'light_net.w'
+    opt.net_name = 'light_net_2019.w'
 
-    opt.num = 781
+    opt.num = 20
 
-    opt.output_folder = './results/Heatmaps_light'
-    opt.output_fig_folder = './results/figs_light'
-    opt.input_folder = './testdata/Test_set_light'
+    opt.output_folder = './results/Heatmaps_light_2019_resample_2'
+    opt.output_fig_folder = './results/figs_light_2019_resample_2'
+    opt.input_folder = './testdata/Test_set_light_2019_resample'
     opt.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     test(opt)
