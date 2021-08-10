@@ -23,18 +23,18 @@ The pretrained models are included in `./model` and you can directly run this pa
 
 Run `test_light.py` and `test_temp.py`, and the heatmaps (confidence) will be stored in `./results`
 
-### MLE Visualization
+### Visualization
 
-Run `MLE.m`. The visualization of heatmaps are stored in `./results/heatmap_visual`. 
+Run `visualization.m`. The visualization of heatmaps are stored in `./results/heatmap_visual`. 
 
 Here is an example of visualization plot
 
 <img src="example_figs/4.png" alt="drawing" width="600"/>
 
-Here are the MLE localization results
+Here are the MLE localization results over all test data
 
-![distribution](example_figs/pic1.png)
-![localization](example_figs/pic2.png)
+<img src="example_figs/pic1.png" alt="drawing" width="600"/>
+<img src="example_figs/pic2.png" alt="drawing" width="600"/>
 
 ## Reference 
 > Mingyu Yang, Roger Hsiao, Gordy Carichner, Katherine Ernst, Jaechan Lim, Delbert A. Green II, Inhee Lee, David Blaauw, and Hun-Seok Kim, "Migrating Monarch Butterfly Localization UsingMulti-Modal Sensor Fusion Neural Networks", EUSIPCO 2020
