@@ -13,13 +13,9 @@ To generate the training data for light, you need to run the MATLAB script `Gene
 
 Simply run `train_light.py` and `train_temp.py`. The logs will be stored in `./logs` and the trained models will be stored in `./model`
 
-## Generate test data
-
-The test data for temperature is included in `./testdata/Test_set_temp`.
-
-For light, run `Generate_testset_light.m`. 
-
 ## Testing the neural networks
+
+The test data for temperature and light are included in `./testdata/Test_set_temp` and `./testdata/Test_set_light`. The light and temperature curves are sampled around the rounded ground truth (for the seek of privacy). We provide 20 test examples.
 
 The pretrained models are included in `./model` and you can directly run this part without re-training the neural networks
 
@@ -27,7 +23,7 @@ The pretrained models are included in `./model` and you can directly run this pa
 
 Run `test_light.py` and `test_temp.py`, and the heatmaps (confidence) will be stored in `./results`
 
-### MLE results and Visualization
+### MLE Visualization
 
 Run `MLE.m`. The visualization of heatmaps are stored in `./results/heatmap_visual`. 
 
